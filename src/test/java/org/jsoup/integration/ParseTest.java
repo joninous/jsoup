@@ -178,6 +178,17 @@ public class ParseTest {
         assertEquals("UTF-8", doc.outputSettings().charset().name());
     }
 
+    @Test
+    public void testMissingQueryParamName() throws IOException {
+        File in = getFile("/htmltests/missing-query-param-name.htm");
+        Document doc = Jsoup.parse(in, null);
+
+        Elements elements = doc.select("a[href^=ft-varaus-input-01]");
+        for (Element element : elements) {
+            assertTrue("Element " + element.toString() + " does not contain expected query param 'pvm'", element.attr("href").contains("&pvm="));
+        }
+    }
+
     public static File getFile(String resourceName) {
         try {
             File file = new File(ParseTest.class.getResource(resourceName).toURI());
